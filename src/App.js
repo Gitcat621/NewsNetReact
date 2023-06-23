@@ -1,23 +1,24 @@
-import logo from './logo.svg';
+
 import './App.css';
+import { Routes, Route } from 'react-router-dom';
+import Menu from "./Componentes/Menu";
+import Bitacora from './Componentes/Bitacora';
+import Usuario from './Componentes/Usuario';
+import Default from './Componentes/Default';
+import CrearCategoria from './Componentes/CrearCategoria'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Rutas aaaaaaaa</h1>
+      <Routes>
+          <Route path="/" element={<Menu />}>
+            <Route path="Bitacora" element={<Bitacora />}/>
+            <Route path="Usuario" element={<Usuario />}/>
+            <Route path="Categoria" element={<CrearCategoria />}/>
+            <Route path="*" element={<Default />}/>
+      </Route>
+      </Routes>
     </div>
   );
 }
