@@ -20,7 +20,7 @@ const App = () => {
   },[]);
 
   const GetDatos = async ()=>{
-      const respuesta = await axios.get('https://localhost:7201/Nota/GetHoy');
+      const respuesta = await axios.get('https://localhost:7201/Nota/Get');
       console.log(respuesta.data.result);
       SetDatos(respuesta.data.result);
   }

@@ -7,21 +7,71 @@
   pointer-events: none;
 }
 
+.App-logo-sipse{
+  height: 13vmin;
+  position: sticky;
+  align-self: center;
+  padding: 0%;
+}
+
+.Logo-BT{
+  height: 8vmin;
+  position: sticky;
+  align-self: center;
+  padding: 0%;
+}
+
+.DateTime{
+  align-self: end;
+  text-align: center;
+  justify-self: end;
+  color: rgb(255, 255, 255);
+  position:static;
+
+
+  font-weight: 600;
+  font-size: 15px;
+
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.App-body{
+  background: #6a11cb;
+  background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1)); 
+  background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1)); 
+  min-height:fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+}
+
+.App-header {
+  background-color: #202530;
+  min-height: 3%;
+  display: flex;
+  flex-direction:inherit;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+}
+
+.App-footer{
+  background-color: #202530;
+  font-family: VCR OSD Mono;
+  font-weight: 10vh;
+  min-height: 25vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: aliceblue;
 }
 
 .App-link {
@@ -35,4 +85,274 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+
+/* CSS LOGIN */
+
+.Auth-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.Auth-form-Main {
+  width: 420px;
+  
+  margin-bottom: 10px;
+  box-shadow: rgb(0 0 0 / 16%) 1px 1px 10px;
+  padding-top: 30px;
+  padding-bottom: 20px;
+  border-radius: 8px;
+  background-color: rgb(196, 196, 196);
+  padding: 10%;
+
+}
+
+.Auth-form {
+  width: 420px;
+  margin-top: -100px;
+  margin-bottom: 10px;
+  box-shadow: rgb(0 0 0 / 16%) 1px 1px 10px;
+  padding-top: 30px;
+  padding-bottom: 20px;
+  border-radius: 8px;
+  background-color: white;
+}
+
+.Auth-form-content {
+  padding-left: 12%;
+  padding-right: 12%;
+}
+
+.Auth-form-title {
+  text-align: center;
+  margin-bottom: 1em;
+  font-size: 24px;
+  color: rgb(34, 34, 34);
+  font-weight: 800;
+}
+
+.Auth-form-subtitle{
+  text-align: center;
+  font-size: smaller;
+  font-weight: 600;
+
+}
+
+.Auth-form-escaleta{
+  width: 1020px;
+  height: auto;
+  margin-top: -100px;
+  margin-bottom: 10px;
+  box-shadow: rgb(0 0 0 / 16%) 1px 1px 10px;
+  padding-top: 30px;
+  padding-bottom: 20px;
+  border-radius: 8px;
+  background-color: white;
+  position: relative;
+}
+
+.Auth-form-Search{
+  width: 650px;
+  margin-top: -100px;
+  margin-bottom: 10px;
+  box-shadow: rgb(0 0 0 / 16%) 1px 1px 10px;
+  padding-top: 30px;
+  padding-bottom: 20px;
+  border-radius: 8px;
+  background-color: white;
+
+}
+
+label {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(34, 34, 34);
+}
+
+
+/* Botones CSS */
+
+button.btn.btn-light{
+  font-size: 30px;
+  font-weight: 500;
+  background-color: rgb(43, 110, 255);
+  border-color: none;
+  padding: 10px;
+  border: none;
+  justify-content: center;
+  display: flex;
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+
+button.btn.btn-light:hover{
+  background-color: rgb(180, 23, 23);
+}
+
+.Menu-form{
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  
+}
+
+.Row{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px; /* Separación entre botones */
+  
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px; /* Espacio entre filas */
+}
+
+
+.Grid{
+  padding-left: 12px;
+
+}
+/* Formato de tablas */
+
+.Table-form{
+  width: 1200px;
+  margin-top: -100px;
+  box-shadow: rgb(0 0 0 / 16%) 1px 1px 10px;
+  padding-top: 5%;
+  padding-bottom: 20px;
+  background-color: rgb(196, 196, 196);
+  padding: 10%;
+
+}
+
+.Button-form{
+  justify-content: left;
+  margin-right: 5%;
+}
+
+.btn{
+  margin-right:10px;
+}
+
+.h3 h3 {
+  font-size: calc(1.3rem + .6vw);
+  font-weight: 800;
+}
+
+.Text-helper{
+  font-size: medium;
+
+}
+
+.buttons-th{
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Button-form{
+  margin-right: 0%;
+}
+
+
+
+/* DRAG AND DROP STYLE */
+
+.example-parent {
+  border: 2px solid #DFA612;
+  color: black;
+  display: flex;
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+.example-origin {
+  flex-basis: 100%;
+  flex-grow: 1;
+  padding: 10px;
+}
+
+.example-draggable {
+  background-color: #4AAE9B;
+  font-weight: normal;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.example-dropzone {
+  background-color: #6DB65B;
+  flex-basis: 100%;
+  flex-grow: 1;
+  padding: 10px;
+}
+
+
+/*   Drag and Drop style*/
+
+
+.dnd {
+  list-style: none;
+  width: 1000px;
+  min-height: 200px;
+  margin: auto;
+  align-items: start;
+  position: relative;
+}
+.dnd li {
+  cursor: move;
+  background-color: rgb(192, 192, 192);
+  color: #000000;
+  padding: 3px;
+  font-size: smaller;
+  margin-bottom: 1px;
+  transition: all 0.2s;
+}
+.dnd li:hover {
+  background-color: rgb(125, 125, 125);
+}
+
+
+
+
+/* Dashboard style */
+
+
+.Dashboard {
+  align-self: start;
+  background-color: #0E0F25;
+  min-width: 8px;
+  color: #ffffff;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
+  min-height: fit-content;
+  font-size: smaller;
+}
+
+
+.widget {
+  background-color: #0b0c26;
+  padding: 10px;
+}
+
+.widget:hover{
+  background-color: #585968;
+}
+
+
+.MenuHeader{
+  background-color: #000a1e;
+  min-height: 8%;
+  width: 1400px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
 }

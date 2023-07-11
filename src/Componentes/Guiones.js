@@ -6,12 +6,11 @@ import { show_alerta } from "../Funciones"
 
 const App = () => {
   const [Datos, SetDatos] = useState([]);
-  const [iD_Nota, setID_Nota] = useState('');
-  const [titulo, setTitulo] = useState('');
-  const [id_Categoria, setId_Categoria] = useState('');
-  const [id_Formato, setId_Formato] = useState('');
-  const [id_Usuario, setId_Usuario] = useState('');
+  const [iD_Guion, setID_Guion] = useState('');
+  const [anotacion, setAnotacion] = useState('');
+  const [descripcion, setDescripcion] = useState('');
   const [fecha, setFecha] = useState('');
+  const [id_Nota, setId_Nota] = useState('');
   const [operation, setOperation] = useState(1);
   const [title, setTitle] = useState('');
 
@@ -20,30 +19,28 @@ const App = () => {
   },[]);
 
   const GetDatos = async ()=>{
-      const respuesta = await axios.get('https://localhost:7201/Nota/GetHoy');
+      const respuesta = await axios.get('https://localhost:7201/Guion/Get');
       console.log(respuesta.data.result);
       SetDatos(respuesta.data.result);
   }
 
-  const OpenModal = (op,iD_Nota,titulo,id_Categoria,id_Formato,id_Usuario,fecha) =>{
-    setID_Nota('');
-    setTitulo('');
-    setId_Categoria('');
-    setId_Formato('');
-    setId_Usuario('');
+  const OpenModal = (op,iD_Guion,anotacion,descripcion,fecha,id_Nota) =>{
+    setID_Guion('');
+    setAnotacion('');
+    setDescripcion('');
     setFecha('');
+    setId_Nota('');
     setOperation(op);
     if(op === 1){
-      setTitle('Crear Nota')
+      setTitle('Crear guion')
     }
     else if(op === 2){
-      setTitle('Actualizar Nota')
-      setID_Nota(iD_Nota);
-      setTitulo(titulo);
-      setId_Categoria(id_Categoria);
-      setId_Formato(id_Formato);
-      setId_Usuario(id_Usuario);
+      setTitle('Actualizar Guion')
+      setID_Guion(iD_Guion);
+      setAnotacion(anotacion);
+      setDescripcion(descripcion);
       setFecha(fecha);
+      setId_Nota(id_Nota);
     }
     window.setTimeout(function(){
       document.getElementById('nombre').focus();
@@ -52,25 +49,23 @@ const App = () => {
   const Validar = () =>{
     var parametros;
     var id;
-    if(titulo.trim()===''){
-      show_alerta('Escribe el titulo','warning');
+    if(anotacion.trim()===''){
+      show_alerta('Escribe la anotacion','warning');
     }
-    else if(id_Categoria===''){
-      show_alerta('Escoge una categoria','warning');
+    else if(descripcion.trim()===''){
+      show_alerta('Escribe la descripcion','warning');
     }
-    else if(id_Formato===''){
-      show_alerta('Seleccion un Formato','warning');
+    else if(fecha.trim()===''){
+      show_alerta('Escribe la fecha','warning');
     }
-    else if(id_Usuario===''){
-      show_alerta('Seleccion un reportero','warning');
+    else if(id_Nota===''){
+      show_alerta('Seleccion la nota perteneciente','warning');
     }
-    else if(fecha===''){
-      show_alerta('Introduce la fecha','warning');
-    }
+
     else{
       if(operation === 1){
-        parametros = {titulo:titulo.trim(),idCategoria:id_Categoria.trim(),idFormato:id_Formato.trim(),idUsuario:id_Usuario.trim()};
-          axios.post('https://localhost:7201/Nota/Post', parametros).then(function(respuesta){
+        parametros = {anotacion:anotacion.trim(),descripcion:descripcion.trim(),idNota:id_Nota.trim()};
+          axios.post('https://localhost:7201/Guion/Post', parametros).then(function(respuesta){
           document.getElementById('btnCerrar').click();
           GetDatos();
         })
@@ -81,9 +76,9 @@ const App = () => {
 
       }
       else{
-        id = {idNota:iD_Nota}
-        parametros = {titulo:titulo.trim(),idCategoria:id_Categoria,idFormato:id_Formato,idUsuario:id_Usuario,fecha:fecha};
-        axios.put('https://localhost:7201/Nota/Put/' + iD_Nota, parametros).then(function(respuesta){
+        id = {idGuion:iD_Guion}
+        parametros = {anotacion:anotacion.trim(),descripcion:descripcion.trim(),fecha:fecha.trim(),idNota:id_Nota};
+        axios.put('https://localhost:7201/Guion/Put/' + iD_Guion, parametros).then(function(respuesta){
           document.getElementById('btnCerrar').click();
           GetDatos();
         })
@@ -96,16 +91,16 @@ const App = () => {
       console.log("Se termino el consumo de la api");
     }
   }
-  const deleteDatos = (iD_Nota) =>{
+  const deleteDatos = (iD_Guion) =>{
     const MySwal = whitReactContent(Swal);
     MySwal.fire({
-      title:'Seguro que quieres borrar esta nota?',
+      title:'Seguro que quieres borrar este guion?',
       icon: 'question', text:'No se podra recuperar despues',
       showCancelButton:true,confirmButtonText:"si, eliminar",cancelbuttonText:'cancelar'
     }).then((result) =>{
       if(result.isConfirmed){
-        setID_Nota(iD_Nota);
-        axios.delete('https://localhost:7201/Nota/Delete/' + iD_Nota).then(function(respuesta){
+        setID_Guion(iD_Guion);
+        axios.delete('https://localhost:7201/Guion/Delete/' + iD_Guion).then(function(respuesta){
           document.getElementById('btnCerrar').click();
           GetDatos();
         })
@@ -133,24 +128,23 @@ const App = () => {
             <div className='table-responsive'>
               <div className='table table-bordered'>
                 <thead>
-                  <tr><th>#</th><th>Titulo</th><th>Categoria</th><th>Formato</th><th>Reportero</th><th>Fecha</th><th>Opciones</th></tr>
+                  <tr><th>#</th><th>Nota</th><th>Anotacion</th><th>Descripcion</th><th>Fecha</th><th>Opciones</th></tr>
                 </thead>
                 <tbody className="table-group-divider">
                   {Datos.map((Datos,i) =>(
-                    <tr key={Datos.iD_Nota}>
+                    <tr key={Datos.iD_Guion}>
                       <td>{(i+1)}</td>
-                      <td>{Datos.titulo}</td>
-                      <td>{Datos.categoria.nomCategoria}</td>
-                      <td>{Datos.formato.nomFormato}</td>
-                      <td>{Datos.usuario.nombre}</td>
+                      <td>{Datos.nota.titulo}</td>
+                      <td>{Datos.anotacion}</td>
+                      <td>{Datos.descripcion}</td>
                       <td>{Datos.fecha}</td>
                       <td>
-                        <button onClick={()=> OpenModal(2,Datos.iD_Nota,Datos.titulo,Datos.id_Categoria,Datos.id_Formato,Datos.id_Usuario,Datos.fecha)} 
+                        <button onClick={()=> OpenModal(2,Datos.iD_Guion,Datos.anotacion,Datos.descripcion,Datos.fecha,Datos.id_Nota)} 
                         className="btn btn-warning" data-bs-toggle='modal' data-bs-target='#modaldefault'>
                           <i className="fa-solid fa-edit"></i>
                         </button>
                         &nbsp;
-                        <button onClick={()=> deleteDatos(Datos.iD_Nota)} className="btn btn-danger">
+                        <button onClick={()=> deleteDatos(Datos.iD_Guion)} className="btn btn-danger">
                           <i className="fa-solid fa-trash"></i>
                         </button>
                       </td>
@@ -173,37 +167,24 @@ const App = () => {
               <input type='hidden' id='id'></input>
               <div className='input-group mb-3'>
                 <span className="input-group-text"><i className="fa-solid fa-gift"></i></span>
-                <input type='text' id="nombre" className="form-control" placeholder="Titulo" value={titulo}
-                onChange={(e)=> setTitulo(e.target.value)}></input>
+                <input type='text' id="nombre" className="form-control" placeholder="Anotacion" value={anotacion}
+                onChange={(e)=> setAnotacion(e.target.value)}></input>
               </div>
               <div className='input-group mb-3'>
                 <span className="input-group-text"><i className="fa-solid fa-gift"></i></span>
-                <input type='text' id="apellidos" className="form-control" placeholder="Fecha(se inserta automaticamente)" value={fecha}
+                <input type='text' id="apellidos" className="form-control" placeholder="Descripcion" value={descripcion}
+                onChange={(e)=> setDescripcion(e.target.value)}></input>
+              </div>
+              <div className='input-group mb-3'>
+                <span className="input-group-text"><i className="fa-solid fa-gift"></i></span>
+                <input type='text' id="nickName" className="form-control" placeholder="Fecha(se inserta automaticamente)" value={fecha}
                 onChange={(e)=> setFecha(e.target.value)}></input>
               </div>
               <div className='input-group mb-3'>
                 <span className="input-group-text"><i className="fa-solid fa-gift"></i></span>
-                <select required className="form-select" value={id_Categoria} onChange={(e)=> setId_Categoria(e.target.value)}>
+                <select required className="form-select" value={id_Nota} onChange={(e)=> setId_Nota(e.target.value)}>
                   {Datos.map(Datos =>(
-                      <option value={Datos.id_Categoria}>{Datos.categoria.nomCategoria}</option>
-                  ))}
-                  //          valor que escoge       datos que se muestran
-                </select>
-              </div>
-              <div className='input-group mb-3'>
-                <span className="input-group-text"><i className="fa-solid fa-gift"></i></span>
-                <select required className="form-select" value={id_Formato} onChange={(e)=> setId_Formato(e.target.value)}>
-                  {Datos.map(Datos =>(
-                      <option value={Datos.id_Formato}>{Datos.formato.nomFormato}</option>
-                  ))}
-                  //          valor que escoge       datos que se muestran
-                </select>
-              </div>
-              <div className='input-group mb-3'>
-                <span className="input-group-text"><i className="fa-solid fa-gift"></i></span>
-                <select required className="form-select" value={id_Usuario} onChange={(e)=> setId_Usuario(e.target.value)}>
-                  {Datos.map(Datos =>(
-                      <option value={Datos.id_Usuario}>{Datos.usuario.nombre}</option>
+                      <option value={Datos.id_Nota}>{Datos.nota.titulo}</option>
                   ))}
                   //          valor que escoge       datos que se muestran
                 </select>
