@@ -6,6 +6,7 @@ import { show_alerta } from "../Funciones"
 
 const App = () => {
   const [Datos, SetDatos] = useState([]);
+  const [Categorias, SetCategorias] = useState([]);
   const [iD_Programa, setID_Programa] = useState('');
   const [nomPrograma, setNomPrograma] = useState('');
   const [id_Categoria, setId_Categoria] = useState('');
@@ -18,8 +19,9 @@ const App = () => {
 
   const GetDatos = async ()=>{
       const respuesta = await axios.get('https://localhost:7201/Programa/Get');
-      console.log(respuesta.data.result);
+      const respuesta2 = await axios.get('https://localhost:7201/Categoria/Get');
       SetDatos(respuesta.data.result);
+      SetCategorias(respuesta2.data.result);
   }
 
   const OpenModal = (op,iD_Programa,nomPrograma,id_Categoria) =>{
@@ -159,8 +161,9 @@ const App = () => {
               <div className='input-group mb-3'>
                 <span className="input-group-text"><i className="fa-solid fa-gift"></i></span>
                 <select required className="form-select" value={id_Categoria} onChange={(e)=> setId_Categoria(e.target.value)}>
-                  {Datos.map(Datos =>(
-                      <option value={Datos.id_Categoria}>{Datos.categoria.nomCategoria}</option>
+                      <option></option>
+                  {Categorias.map(Categorias =>(
+                      <option value={Categorias.iD_Categoria}>{Categorias.nomCategoria}</option>
                   ))}
                   //          valor que escoge       datos que se muestran
                 </select>

@@ -9,16 +9,19 @@ return <div>
             <Link to="Bitacora">Bitacora</Link>
 		</td>
 		<td> 
-            <Link to="Escaletas">Escaletas</Link>
+            <Link to="EscaletaProgramas">Escaletas</Link>
 		</td>
 		<td class="mnu_separator">
-			<Link to="Guiones">Notas</Link>
+			<Link to="GuionNota">Notas</Link>
 		</td>
 		<td class="mnu_separator">
 			<p>///</p>
 		</td>
 		<td class="mnu_separator">
 		<Link to="Usuario">Usuario</Link>
+		</td>
+		<td class="mnu_separator">
+		<Link to="Notas">Notas</Link>
 		</td>
 		<td class="mnu_separator">
 		<Link to="Guiones">Guiones</Link>

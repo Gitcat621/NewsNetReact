@@ -109,7 +109,7 @@ const App = () => {
             <div className='table-responsive'>
               <div className='table table-bordered'>
                 <thead>
-                  <tr><th>#</th><th>Datos1</th><th>Datos2</th><th>Datos3</th></tr>
+                  <tr><th>#</th><th>Nombre</th><th>Opciones</th></tr>
                 </thead>
                <tbody className="table-group-divider">
                   {Datos.map((Datos,i) =>(

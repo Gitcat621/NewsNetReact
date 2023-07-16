@@ -3,16 +3,16 @@ import axios from 'axios'
 import Swal from 'sweetalert2'
 import whitReactContent from 'sweetalert2-react-content'
 import { show_alerta } from "../Funciones"
+import { Link } from "react-router-dom";
 
 const App = () => {
   const [Datos, SetDatos] = useState([]);
-  const [Roles, SetRoles] = useState([]);
-  const [iD_Usuario, setID_Usuario] = useState('');
-  const [nombre, setNombre] = useState('');
-  const [apellidos, setApellidos] = useState('');
-  const [nickName, setNickName] = useState('');
-  const [password, setPassword] = useState('');
-  const [id_Rol, setId_Rol] = useState('');
+  const [iD_Nota, setID_Nota] = useState('');
+  const [titulo, setTitulo] = useState('');
+  const [id_Categoria, setId_Categoria] = useState('');
+  const [id_Formato, setId_Formato] = useState('');
+  const [id_Usuario, setId_Usuario] = useState('');
+  const [fecha, setFecha] = useState('');
   const [operation, setOperation] = useState(1);
   const [title, setTitle] = useState('');
 
@@ -21,32 +21,30 @@ const App = () => {
   },[]);
 
   const GetDatos = async ()=>{
-      const respuesta = await axios.get('https://localhost:7201/Usuario/Get')
-      const respuesta2 = await axios.get('https://localhost:7201/Rol/Get')
+      const respuesta = await axios.get('https://localhost:7201/Nota/Get');
       console.log(respuesta.data.result);
       SetDatos(respuesta.data.result);
-      SetRoles(respuesta2.data.result);
   }
 
-  const OpenModal = (op,iD_Usuario,nombre,apellidos,nickName,password,id_Rol) =>{
-    setID_Usuario('');
-    setNombre('');
-    setApellidos('');
-    setNickName('');
-    setPassword('');
-    setId_Rol('');
+  const OpenModal = (op,iD_Nota,titulo,id_Categoria,id_Formato,id_Usuario,fecha) =>{
+    setID_Nota('');
+    setTitulo('');
+    setId_Categoria('');
+    setId_Formato('');
+    setId_Usuario('');
+    setFecha('');
     setOperation(op);
     if(op === 1){
-      setTitle('Registrar Usuario')
+      setTitle('Crear Nota')
     }
     else if(op === 2){
-      setTitle('Actualizar Usuario')
-      setID_Usuario(iD_Usuario);
-      setNombre(nombre);
-      setApellidos(apellidos);
-      setNickName(nickName);
-      setPassword(password);
-      setId_Rol(id_Rol);
+      setTitle('Actualizar Nota')
+      setID_Nota(iD_Nota);
+      setTitulo(titulo);
+      setId_Categoria(id_Categoria);
+      setId_Formato(id_Formato);
+      setId_Usuario(id_Usuario);
+      setFecha(fecha);
     }
     window.setTimeout(function(){
       document.getElementById('nombre').focus();
@@ -55,26 +53,25 @@ const App = () => {
   const Validar = () =>{
     var parametros;
     var id;
-    if(nombre.trim()===''){
-      show_alerta('Escribe el nombre','warning');
+    if(titulo.trim()===''){
+      show_alerta('Escribe el titulo','warning');
     }
-    else if(apellidos.trim()===''){
-      show_alerta('Escribe los apellidos','warning');
+    else if(id_Categoria===''){
+      show_alerta('Escoge una categoria','warning');
     }
-    else if(nickName.trim()===''){
-      show_alerta('Escribe el nombre de usuario','warning');
+    else if(id_Formato===''){
+      show_alerta('Seleccion un Formato','warning');
     }
-    else if(password.trim()===''){
-      show_alerta('Escribe la contraseña','warning');
+    else if(id_Usuario===''){
+      show_alerta('Seleccion un reportero','warning');
     }
-    else if(id_Rol===''){
-      show_alerta('Escoge el cargo del usuario','warning');
+    else if(fecha===''){
+      show_alerta('Introduce la fecha','warning');
     }
-
     else{
       if(operation === 1){
-        parametros = {nombre:nombre.trim(),apellidos:apellidos.trim(),nickName:nickName.trim(),password:password.trim(),idRol:id_Rol.trim()};
-          axios.post('https://localhost:7201/Usuario/Post', parametros).then(function(respuesta){
+        parametros = {titulo:titulo.trim(),idCategoria:id_Categoria.trim(),idFormato:id_Formato.trim(),idUsuario:id_Usuario.trim()};
+          axios.post('https://localhost:7201/Guion/Post', parametros).then(function(respuesta){
           document.getElementById('btnCerrar').click();
           GetDatos();
         })
@@ -85,15 +82,14 @@ const App = () => {
 
       }
       else{
-        id = {idUsuario:iD_Usuario}
-        parametros = {nombre:nombre.trim(),apellidos:apellidos.trim(),nickName:nickName.trim(),password:password.trim(),idRol:id_Rol};
-        axios.put('https://localhost:7201/Usuario/Put/' + iD_Usuario, parametros).then(function(respuesta){
+        id = {idNota:iD_Nota}
+        parametros = {titulo:titulo.trim(),idCategoria:id_Categoria,idFormato:id_Formato,idUsuario:id_Usuario,fecha:fecha};
+        axios.put('https://localhost:7201/Guion/Put/' + iD_Nota, parametros).then(function(respuesta){
           document.getElementById('btnCerrar').click();
           GetDatos();
         })
         .catch(function(error){
           show_alerta('error en la solicitud','error');
-          console.log('el id:' + iD_Usuario);
           console.log(error);
         });
 
@@ -101,22 +97,21 @@ const App = () => {
       console.log("Se termino el consumo de la api");
     }
   }
-  const deleteDatos = (iD_Usuario,nombre) =>{
+  const deleteDatos = (iD_Nota) =>{
     const MySwal = whitReactContent(Swal);
     MySwal.fire({
-      title:'Seguro que quieres borrar a ' + nombre +'?',
+      title:'Seguro que quieres borrar esta nota?',
       icon: 'question', text:'No se podra recuperar despues',
       showCancelButton:true,confirmButtonText:"si, eliminar",cancelbuttonText:'cancelar'
     }).then((result) =>{
       if(result.isConfirmed){
-        setID_Usuario(iD_Usuario);
-        axios.delete('https://localhost:7201/Usuario/Delete/' + iD_Usuario).then(function(respuesta){
+        setID_Nota(iD_Nota);
+        axios.delete('https://localhost:7201/Nota/Delete/' + iD_Nota).then(function(respuesta){
           document.getElementById('btnCerrar').click();
           GetDatos();
         })
         .catch(function(error){
           show_alerta('error en la solicitud','error');
-          console.log('el id:' + iD_Usuario);
           console.log(error);
         });
       }
@@ -127,11 +122,6 @@ const App = () => {
       <div className='container-fluid'>
         <div className='row mt-3'>
           <div className='col-md-4 offset-4'>
-            <div className='d-grid mx-auto'>
-                <button onClick={()=> OpenModal(1)} className='btn btn-dark' data-bs-toggle='modal' data-bs-target='#modaldefault'>
-                  <i className='fa-solid fa-circle-plus'></i> Crear
-                </button>
-            </div>
           </div>
         </div>
         <div className='row mt-3'>
@@ -139,24 +129,27 @@ const App = () => {
             <div className='table-responsive'>
               <div className='table table-bordered'>
                 <thead>
-                  <tr><th>#</th><th>Usuario</th><th>apellidos</th><th>Usser</th><th>Password</th><th>Cargo</th><th>Opciones</th></tr>
+                  <tr><th>#</th><th>Titulo</th><th>Categoria</th><th>Formato</th><th>Reportero</th><th>Fecha</th><th>Opciones</th></tr>
                 </thead>
                 <tbody className="table-group-divider">
                   {Datos.map((Datos,i) =>(
-                    <tr key={Datos.iD_Usuario}>
+                    <tr key={Datos.iD_Nota}>
                       <td>{(i+1)}</td>
-                      <td>{Datos.nombre}</td>
-                      <td>{Datos.apellidos}</td>
-                      <td>{Datos.nickName}</td>
-                      <td>{Datos.password}</td>
-                      <td>{Datos.rol.nomRol}</td>
-                      <td>
-                        <button onClick={()=> OpenModal(2,Datos.iD_Usuario,Datos.nombre,Datos.apellidos,Datos.nickName,Datos.password,Datos.id_Rol)} 
+                      <td>{Datos.titulo}</td>
+                      <td>{Datos.categoria.nomCategoria}</td>
+                      <td>{Datos.formato.nomFormato}</td>
+                      <td>{Datos.usuario.nombre}</td>
+                      <td>{Datos.fecha}</td>
+                      <td className="buttons-th">
+                        <Link to={'/VerGuion/'+ Datos.iD_Nota} class="btn btn-success"> Ver </Link>
+                        <button onClick={()=> OpenModal(1)} className='btn btn-dark' data-bs-toggle='modal' data-bs-target='#modaldefault'>Crear</button>
+                        <br/><Link to={'/Guion/'+ Datos.iD_Nota} class="btn btn-success"> <i className='fa-solid fa-circle-plus'></i> Crear en otra ventana</Link>
+                        <button onClick={()=> OpenModal(2,Datos.iD_Nota,Datos.titulo,Datos.id_Categoria,Datos.id_Formato,Datos.id_Usuario,Datos.fecha)} 
                         className="btn btn-warning" data-bs-toggle='modal' data-bs-target='#modaldefault'>
                           <i className="fa-solid fa-edit"></i>
                         </button>
                         &nbsp;
-                        <button onClick={()=> deleteDatos(Datos.iD_Usuario,Datos.nombre)} className="btn btn-danger">
+                        <button onClick={()=> deleteDatos(Datos.iD_Nota)} className="btn btn-danger">
                           <i className="fa-solid fa-trash"></i>
                         </button>
                       </td>
@@ -179,30 +172,37 @@ const App = () => {
               <input type='hidden' id='id'></input>
               <div className='input-group mb-3'>
                 <span className="input-group-text"><i className="fa-solid fa-gift"></i></span>
-                <input type='text' id="nombre" className="form-control" placeholder="Nombre" value={nombre}
-                onChange={(e)=> setNombre(e.target.value)}></input>
+                <input type='text' id="nombre" className="form-control" placeholder="Titulo" value={titulo}
+                onChange={(e)=> setTitulo(e.target.value)}></input>
               </div>
               <div className='input-group mb-3'>
                 <span className="input-group-text"><i className="fa-solid fa-gift"></i></span>
-                <input type='text' id="apellidos" className="form-control" placeholder="Apellidos" value={apellidos}
-                onChange={(e)=> setApellidos(e.target.value)}></input>
+                <input type='text' id="apellidos" className="form-control" placeholder="Fecha(se inserta automaticamente)" value={fecha}
+                onChange={(e)=> setFecha(e.target.value)}></input>
               </div>
               <div className='input-group mb-3'>
                 <span className="input-group-text"><i className="fa-solid fa-gift"></i></span>
-                <input type='text' id="nickName" className="form-control" placeholder="Usser" value={nickName}
-                onChange={(e)=> setNickName(e.target.value)}></input>
+                <select required className="form-select" value={id_Categoria} onChange={(e)=> setId_Categoria(e.target.value)}>
+                  {Datos.map(Datos =>(
+                      <option value={Datos.id_Categoria}>{Datos.categoria.nomCategoria}</option>
+                  ))}
+                  //          valor que escoge       datos que se muestran
+                </select>
               </div>
               <div className='input-group mb-3'>
                 <span className="input-group-text"><i className="fa-solid fa-gift"></i></span>
-                <input id="password" className="form-control" placeholder="Contraseña" value={password}
-                onChange={(e)=> setPassword(e.target.value)}></input>
+                <select required className="form-select" value={id_Formato} onChange={(e)=> setId_Formato(e.target.value)}>
+                  {Datos.map(Datos =>(
+                      <option value={Datos.id_Formato}>{Datos.formato.nomFormato}</option>
+                  ))}
+                  //          valor que escoge       datos que se muestran
+                </select>
               </div>
               <div className='input-group mb-3'>
                 <span className="input-group-text"><i className="fa-solid fa-gift"></i></span>
-                <select required className="form-select"  value={id_Rol} onChange={(e)=> setId_Rol(e.target.value)}>
-                      <option selected></option>
-                  {Roles.map(Roles =>(
-                      <option value={Roles.iD_Rol}>{Roles.nomRol}</option>
+                <select required className="form-select" value={id_Usuario} onChange={(e)=> setId_Usuario(e.target.value)}>
+                  {Datos.map(Datos =>(
+                      <option value={Datos.id_Usuario}>{Datos.usuario.nombre}</option>
                   ))}
                   //          valor que escoge       datos que se muestran
                 </select>

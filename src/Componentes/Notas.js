@@ -6,6 +6,9 @@ import { show_alerta } from "../Funciones"
 
 const App = () => {
   const [Datos, SetDatos] = useState([]);
+  const [Categorias, SetCategorias] = useState([]);
+  const [Formatos, SetFormatos] = useState([]);
+  const [Usuarios, SetUsuarios] = useState([]);
   const [iD_Nota, setID_Nota] = useState('');
   const [titulo, setTitulo] = useState('');
   const [id_Categoria, setId_Categoria] = useState('');
@@ -20,9 +23,14 @@ const App = () => {
   },[]);
 
   const GetDatos = async ()=>{
-      const respuesta = await axios.get('https://localhost:7201/Nota/Get');
-      console.log(respuesta.data.result);
-      SetDatos(respuesta.data.result);
+    const respuesta = await axios.get('https://localhost:7201/Nota/Get');
+    const respuesta2 = await axios.get('https://localhost:7201/Categoria/Get');
+    const respuesta3 = await axios.get('https://localhost:7201/Formato/Get');
+    const respuesta4 = await axios.get('https://localhost:7201/Usuario/Get');
+    SetDatos(respuesta.data.result);
+    SetCategorias(respuesta2.data.result);
+    SetFormatos(respuesta3.data.result);
+    SetUsuarios(respuesta4.data.result);
   }
 
   const OpenModal = (op,iD_Nota,titulo,id_Categoria,id_Formato,id_Usuario,fecha) =>{
@@ -51,50 +59,62 @@ const App = () => {
   }
   const Validar = () =>{
     var parametros;
-    var id;
-    if(titulo.trim()===''){
-      show_alerta('Escribe el titulo','warning');
+    if(operation === 1){
+      if(titulo.trim()===''){
+        show_alerta('Escribe el titulo','warning');
+      }
+      else if(id_Categoria===''){
+        show_alerta('Escoge una categoria','warning');
+      }
+      else if(id_Formato===''){
+        show_alerta('Seleccion un Formato','warning');
+      }
+      else if(id_Usuario===''){
+        show_alerta('Seleccion un reportero','warning');
+      }
     }
-    else if(id_Categoria===''){
-      show_alerta('Escoge una categoria','warning');
+    else if(operation === 2){
+      if(titulo.trim()===''){
+        show_alerta('Escribe el titulo','warning');
+      }
+      else if(id_Categoria===''){
+        show_alerta('Escoge una categoria','warning');
+      }
+      else if(id_Formato===''){
+        show_alerta('Seleccion un Formato','warning');
+      }
+      else if(id_Usuario===''){
+        show_alerta('Seleccion un reportero','warning');
+      }
+      else if(fecha===''){
+        show_alerta('Introduce la fecha','warning');
+      }
     }
-    else if(id_Formato===''){
-      show_alerta('Seleccion un Formato','warning');
-    }
-    else if(id_Usuario===''){
-      show_alerta('Seleccion un reportero','warning');
-    }
-    else if(fecha===''){
-      show_alerta('Introduce la fecha','warning');
+    if(operation === 1){
+      parametros = {titulo:titulo.trim(),idCategoria:id_Categoria.trim(),idFormato:id_Formato.trim(),idUsuario:id_Usuario.trim()};
+        axios.post('https://localhost:7201/Nota/Post', parametros).then(function(respuesta){
+        document.getElementById('btnCerrar').click();
+        GetDatos();
+      })
+      .catch(function(error){
+        show_alerta('error en la solicitud','error');
+        console.log(error);
+      });
+
     }
     else{
-      if(operation === 1){
-        parametros = {titulo:titulo.trim(),idCategoria:id_Categoria.trim(),idFormato:id_Formato.trim(),idUsuario:id_Usuario.trim()};
-          axios.post('https://localhost:7201/Nota/Post', parametros).then(function(respuesta){
-          document.getElementById('btnCerrar').click();
-          GetDatos();
-        })
-        .catch(function(error){
-          show_alerta('error en la solicitud','error');
-          console.log(error);
-        });
+      parametros = {titulo:titulo.trim(),idCategoria:id_Categoria,idFormato:id_Formato,idUsuario:id_Usuario,fecha:fecha};
+      axios.put('https://localhost:7201/Nota/Put/' + iD_Nota, parametros).then(function(respuesta){
+        document.getElementById('btnCerrareditar').click();
+        GetDatos();
+      })
+      .catch(function(error){
+        show_alerta('error en la solicitud','error');
+        console.log(error);
+      });
 
-      }
-      else{
-        id = {idNota:iD_Nota}
-        parametros = {titulo:titulo.trim(),idCategoria:id_Categoria,idFormato:id_Formato,idUsuario:id_Usuario,fecha:fecha};
-        axios.put('https://localhost:7201/Nota/Put/' + iD_Nota, parametros).then(function(respuesta){
-          document.getElementById('btnCerrar').click();
-          GetDatos();
-        })
-        .catch(function(error){
-          show_alerta('error en la solicitud','error');
-          console.log(error);
-        });
-
-      }
-      console.log("Se termino el consumo de la api");
     }
+    console.log("Se termino el consumo de la api");
   }
   const deleteDatos = (iD_Nota) =>{
     const MySwal = whitReactContent(Swal);
@@ -146,7 +166,7 @@ const App = () => {
                       <td>{Datos.fecha}</td>
                       <td>
                         <button onClick={()=> OpenModal(2,Datos.iD_Nota,Datos.titulo,Datos.id_Categoria,Datos.id_Formato,Datos.id_Usuario,Datos.fecha)} 
-                        className="btn btn-warning" data-bs-toggle='modal' data-bs-target='#modaldefault'>
+                        className="btn btn-warning" data-bs-toggle='modal' data-bs-target='#modaleditar'>
                           <i className="fa-solid fa-edit"></i>
                         </button>
                         &nbsp;
@@ -178,14 +198,10 @@ const App = () => {
               </div>
               <div className='input-group mb-3'>
                 <span className="input-group-text"><i className="fa-solid fa-gift"></i></span>
-                <input type='text' id="apellidos" className="form-control" placeholder="Fecha(se inserta automaticamente)" value={fecha}
-                onChange={(e)=> setFecha(e.target.value)}></input>
-              </div>
-              <div className='input-group mb-3'>
-                <span className="input-group-text"><i className="fa-solid fa-gift"></i></span>
                 <select required className="form-select" value={id_Categoria} onChange={(e)=> setId_Categoria(e.target.value)}>
-                  {Datos.map(Datos =>(
-                      <option value={Datos.id_Categoria}>{Datos.categoria.nomCategoria}</option>
+                      <option></option>
+                  {Categorias.map(Categorias =>(
+                      <option value={Categorias.iD_Categoria}>{Categorias.nomCategoria}</option>
                   ))}
                   //          valor que escoge       datos que se muestran
                 </select>
@@ -193,8 +209,9 @@ const App = () => {
               <div className='input-group mb-3'>
                 <span className="input-group-text"><i className="fa-solid fa-gift"></i></span>
                 <select required className="form-select" value={id_Formato} onChange={(e)=> setId_Formato(e.target.value)}>
-                  {Datos.map(Datos =>(
-                      <option value={Datos.id_Formato}>{Datos.formato.nomFormato}</option>
+                      <option></option>
+                  {Formatos.map(Formatos =>(
+                      <option value={Formatos.iD_Formato}>{Formatos.nomFormato}</option>
                   ))}
                   //          valor que escoge       datos que se muestran
                 </select>
@@ -202,8 +219,9 @@ const App = () => {
               <div className='input-group mb-3'>
                 <span className="input-group-text"><i className="fa-solid fa-gift"></i></span>
                 <select required className="form-select" value={id_Usuario} onChange={(e)=> setId_Usuario(e.target.value)}>
-                  {Datos.map(Datos =>(
-                      <option value={Datos.id_Usuario}>{Datos.usuario.nombre}</option>
+                    <option></option>
+                  {Usuarios.map(Usuarios =>(
+                      <option value={Usuarios.iD_Usuario}>{Usuarios.nombre}</option>
                   ))}
                   //          valor que escoge       datos que se muestran
                 </select>
@@ -216,6 +234,67 @@ const App = () => {
             </div>
             <div className="modal-footer">
                     <button type="button" id='btnCerrar' className="btn btn-secondary" data-bs-dismiss='modal'>cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='modaleditar' className='modal fade' aria-hidden='true'>
+        <div className='modal-dialog'>
+          <div className='modal-content'>
+            <div className='modal-header'>
+              <label className='h5'>{title}</label>
+              <button type='button' className='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+            </div>
+            <div className='modal-body'>
+              <input type='hidden' id='id'></input>
+              <div className='input-group mb-3'>
+                <span className="input-group-text"><i className="fa-solid fa-gift"></i></span>
+                <input type='text' id="nombre" className="form-control" placeholder="Titulo" value={titulo}
+                onChange={(e)=> setTitulo(e.target.value)}></input>
+              </div>
+              <div className='input-group mb-3'>
+                <span className="input-group-text"><i className="fa-solid fa-gift"></i></span>
+                <input type='text' id="apellidos" className="form-control" placeholder="Fecha(se inserta automaticamente)" value={fecha}
+                onChange={(e)=> setFecha(e.target.value)}></input>
+              </div>
+              <div className='input-group mb-3'>
+                <span className="input-group-text"><i className="fa-solid fa-gift"></i></span>
+                <select required className="form-select" value={id_Categoria} onChange={(e)=> setId_Categoria(e.target.value)}>
+                      <option></option>
+                  {Categorias.map(Categorias =>(
+                      <option value={Categorias.iD_Categoria}>{Categorias.nomCategoria}</option>
+                  ))}
+                  //          valor que escoge       datos que se muestran
+                </select>
+              </div>
+              <div className='input-group mb-3'>
+                <span className="input-group-text"><i className="fa-solid fa-gift"></i></span>
+                <select required className="form-select" value={id_Formato} onChange={(e)=> setId_Formato(e.target.value)}>
+                      <option></option>
+                  {Formatos.map(Formatos =>(
+                      <option value={Formatos.iD_Formato}>{Formatos.nomFormato}</option>
+                  ))}
+                  //          valor que escoge       datos que se muestran
+                </select>
+              </div>
+              <div className='input-group mb-3'>
+                <span className="input-group-text"><i className="fa-solid fa-gift"></i></span>
+                <select required className="form-select" value={id_Usuario} onChange={(e)=> setId_Usuario(e.target.value)}>
+                    <option></option>
+                  {Usuarios.map(Usuarios =>(
+                      <option value={Usuarios.iD_Usuario}>{Usuarios.nombre}</option>
+                  ))}
+                  //          valor que escoge       datos que se muestran
+                </select>
+              </div>
+              <div className="d-grid col-6 mx-auto">
+                    <button onClick={()=> Validar()} className="btn btn-success">
+                      <i className="fa-solid fa-floppy-disk"></i> Guardar
+                    </button>
+              </div>
+            </div>
+            <div className="modal-footer">
+                    <button type="button" id='btnCerrareditar' className="btn btn-secondary" data-bs-dismiss='modal'>cerrar</button>
             </div>
           </div>
         </div>

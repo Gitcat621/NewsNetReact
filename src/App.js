@@ -5,7 +5,6 @@ import Usuario from './Componentes/Usuario';
 import Default from './Componentes/Default';
 import Escaleta from './Componentes/Escaleta';
 import Guion from './Componentes/Guion';
-import CrearNota from './Componentes/CrearNota';
 import LoginView from './Componentes/LoginView';
 import CPrueba from './Componentes/CPrueba';
 import Categorias from './Componentes/Categorias';
@@ -14,7 +13,12 @@ import Guiones from './Componentes/Guiones';
 import Conductor from './Componentes/Conductor';
 import Formatos from './Componentes/Formatos';
 import Programas from './Componentes/Programas';
-import Escaletas from './Componentes/Escaletas'
+import Escaletas from './Componentes/Escaletas';
+import EscaletasProgramas from './Componentes/EscaletaProgramas';
+import GuionNota from './Componentes/GuionNota';
+import VerGuion from './Componentes/VerGuion';
+import Notas from './Componentes/Notas';
+import ArmadoEscaleta from './Componentes/ArmadoEscaleta';
 
 function App() {
   return (
@@ -22,7 +26,7 @@ function App() {
        <header className='App-header'> 
 
         <div className='DateTime'>
-          <p>HOLA</p>
+
         </div>
 
       </header>
@@ -33,10 +37,9 @@ function App() {
           <Route path="Header" element={ <Header /> }>
             <Route path="Bitacora" element={<Bitacora />}/>
             <Route path="Usuario" element={<Usuario />}/>
-            <Route path="Escaleta" element={<Escaleta />}/>
-            <Route path="Escaletas" element={<Escaletas />}/>
+            <Route path="EscaletaProgramas" element={<EscaletasProgramas />}/>
+            <Route path="GuionNota" element={<GuionNota />}/>
             <Route path="Guiones" element={<Guiones />}/>
-            <Route path="Guion" element={<Guion />}/>
             <Route path="*" element={<Default />}/>
             <Route path="CPrueba" element={<CPrueba />}/>
             <Route path="Roles" element={<Roles />}/>
@@ -44,9 +47,13 @@ function App() {
             <Route path="Conductor" element={<Conductor />}/>
             <Route path="Formatos" element={<Formatos />}/>
             <Route path="Programas" element={<Programas />}/>
+            <Route path="Notas" element={<Notas />}/>
           </Route>
-          <Route path="CrearNota" element={<CrearNota />}/>
-
+          <Route path="Escaletas/:id" element={<Escaletas />}/>
+          <Route path="Escaleta/:id" element={<Escaleta />}/>
+          <Route path="Guion/:id" element={<Guion />}/>
+          <Route path="VerGuion/:id" element={<VerGuion />}/>
+          <Route path="ArmadoEscaleta" element={<ArmadoEscaleta />}/>
       </Routes>
       </body>
       {/* <footer className='App-footer'>
